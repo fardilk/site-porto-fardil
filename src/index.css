@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+.bg-primary { background-color: #14213d; }
+.text-primary { color: #14213d; }
+.border-primary { border-color: #14213d; }
+
+.bg-secondary { background-color: #284273; }
+.text-secondary { color: #284273; }
+.border-secondary { border-color: #284273; }
+
+.bg-accent { background-color: #fca311; }
+.text-accent { color: #fca311; }
+.border-accent { border-color: #fca311; }
+
+.bg-neutral { background-color: #22223b; }
+.text-neutral { color: #22223b; }
+.bg-surface { background-color: #e5e5e5; }
+
+/* Optional status */
+.text-danger { color: #d7263d; }
+.text-success { color: #2ec4b6; }
+
+.container-80 {
+  width: 80%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #fff !important;
+  width: 28px !important;
+  height: 28px !important;
+  top: 60% !important;
+  z-index: 20 !important;
+}
+.swiper-button-prev {
+  left: 0px !important;   /* tambah besar, makin keluar */
+}
+.swiper-button-next {
+  right: 0px !important;
+}
+
+/* PAGINATION DOTS */
+.swiper-pagination {
+  position: absolute !important;
+  left: 0;
+  right: 0;
+  top: -10px !important;   /* jarak di bawah paragraf */
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  z-index: 20;
+}
+
+
