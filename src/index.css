@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+
+
 .bg-primary { background-color: #14213d; }
 .text-primary { color: #14213d; }
 .border-primary { border-color: #14213d; }
@@ -56,4 +58,20 @@
   z-index: 20;
 }
 
+/* Checkerboard background for hero section */
+.hero-bg {
+  background-image: url('data:image/svg+xml;utf8,<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="120" height="120" fill="white" fill-opacity="0"/><rect x="10" y="10" width="40" height="40" rx="12" fill="%23f3f4f6" fill-opacity="0.3"/><rect x="60" y="60" width="50" height="50" rx="18" fill="%23e5e7eb" fill-opacity="0.3"/><rect x="30" y="70" width="30" height="30" rx="10" fill="%23fff" fill-opacity="0.3"/><rect x="70" y="20" width="30" height="30" rx="10" fill="%23f8fafc" fill-opacity="0.3"/></svg>');
+  background-size: 180px 180px;
+  background-repeat: repeat;
+  background-blend-mode: multiply;
+  /* Optional: randomize scale/position for dynamic feel */
+  animation: heroPatternMove 16s linear infinite alternate;
+}
 
+@keyframes heroPatternMove {
+  0% { background-position: 0 0; background-size: 180px 180px; }
+  25% { background-position: 40px 20px; background-size: 200px 200px; }
+  50% { background-position: 80px 40px; background-size: 160px 160px; }
+  75% { background-position: 20px 80px; background-size: 220px 220px; }
+  100% { background-position: 0 0; background-size: 180px 180px; }
+}

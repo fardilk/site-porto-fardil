@@ -26,8 +26,12 @@ const Navbar: React.FC = () => {
         : "bg-transparent border-transparent")
     }>
       <div className="w-full max-w-1200 md:w-4/5 mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="font-bold text-xl tracking-wide text-accent transition-colors">
-          Fardil <span className="text-white">KHALIDI</span>
+        <div className={`flex flex-col items-start select-none ${scrolled ? '' : ''}`}>
+          <span className={`font-extrabold text-3xl md:text-4xl leading-none ${scrolled ? 'text-white' : 'text-primary'}`}>Fardil</span>
+          <div className="flex flex-row items-center mt-0.5">
+            <span className={`font-medium text-base md:text-lg leading-none mr-2 ${scrolled ? 'text-white/70' : 'text-primary/70'}`}>Khalidi</span>
+            <span className="font-extrabold text-3xl md:text-4xl text-[#fca311] leading-none" style={{fontSize: '1.4em'}}>•</span>
+          </div>
         </div>
         <div className="flex gap-1 md:gap-3">
           {navItems.map((item) => (

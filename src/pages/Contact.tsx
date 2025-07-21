@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from '../components/navbar/Navbar';
 
-const Portfolio: React.FC = () => (
+const Contact: React.FC = () => (
   <>
     <Navbar />
     <main className="mt-12">
@@ -11,4 +11,4 @@ const Portfolio: React.FC = () => (
   </>
 );
 
-export default Portfolio;
+export default Contact;
