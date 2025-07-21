@@ -90,7 +90,7 @@ const Hero: React.FC = () => {
                 }}
               >
                 <img
-                  src="/public/fardil.png"
+                  src="/fardil.png"
                   alt="Fardil Khalidi"
                   className="w-full h-full object-cover rounded-2xl object-[center_40%]"
                   style={{ filter: "blur(0.5px)" }}
