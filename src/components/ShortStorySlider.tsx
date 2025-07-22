@@ -178,9 +178,9 @@ const ShortStorySlider: React.FC = () => {
                 loop
                 centeredSlides
                 autoplay={{ delay: AUTOPLAY_DELAY, disableOnInteraction: false }}
-                spaceBetween={-95}
+                spaceBetween={-700} // No gap between slides
                 slidesPerView={3}
-                className="w-full"
+                className="w-full flex justify-center"
                 onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 onSwiper={(swiper) => (swiperRef.current = swiper)}
                 aria-label="Short story slider"
@@ -196,36 +196,45 @@ const ShortStorySlider: React.FC = () => {
                     let visibility = "hidden";
 
                     if (idx === activeIndex) {
-                        scale = "scale-100";
-                        opacity = "opacity-100";
-                        z = "z-10";
-                        translate = "";
-                        visibility = "";
-                    } else if (idx === nextIdx) {
-                        scale = "scale-80";
-                        opacity = "opacity-80";
-                        z = "z-0";
-                        translate = "md:translate-x-8";
-                        visibility = "";
-                    } else if (idx === prevIdx) {
-                        scale = "scale-80";
-                        opacity = "opacity-80";
-                        z = "z-0";
-                        translate = "md:-translate-x-8";
-                        visibility = "";
-                    }
+  scale = "scale-100";
+  opacity = "opacity-100";
+  z = "z-20"; // Tengah benar-benar di depan
+  translate = "translate-x-0";
+  visibility = "";
+} else if (idx === nextIdx) {
+  scale = "scale-90";
+  opacity = "opacity-60";
+  z = "z-0"; // Kanan tetap di belakang
+  translate = "translate-x-24"; // dorong ke kanan
+  visibility = "";
+} else if (idx === prevIdx) {
+  scale = "scale-90";
+  opacity = "opacity-60";
+  z = "z-10"; // kiri masih sedikit di atas kanan
+  translate = "-translate-x-24"; // dorong ke kiri
+  visibility = "";
+} else {
+  scale = "scale-75";
+  opacity = "opacity-0";
+  z = "z-0";
+  translate = "translate-x-0";
+  visibility = "hidden";
+}
 
-                    // Only render visible slides, hide others
+
                     return (
-                        <SwiperSlide key={idx}>
+                        <SwiperSlide key={idx} className="flex justify-center">
                             <div
-                                className={`transition-all duration-500 flex flex-col items-start justify-start px-4 py-8 min-h-[220px] md:min-h-[260px] rounded-xl bg-white shadow-[0_6px_24px_0_rgba(34,85,60,0.18)] ${scale} ${opacity} ${z} ${translate} ${visibility}`}
+                                className={`transition-all duration-500 flex flex-col items-start justify-start px-4 py-8 min-h-[220px] md:min-h-[260px] rounded-xl bg-white shadow-[0_6px_24px_0_rgba(34,85,60,0.18)] w-full ${scale} ${opacity} ${z} ${translate} ${visibility}`}
+                                style={
+                                    visibility === "hidden"
+                                        ? { display: "none", maxWidth: "320px" }
+                                        : { maxWidth: "320px", marginLeft: "auto", marginRight: "auto" }
+                                }
                                 tabIndex={0}
                                 aria-label={item.title}
                                 role="group"
-                                style={visibility === "hidden" ? { display: "none" } : {}}
                             >
-                                
                                 <div className="w-full aspect-[16/6] mb-4 flex items-center justify-center overflow-hidden rounded-lg border-2 border-[#22553c] bg-gray-100">
                                     <img
                                         src={item.image}
@@ -243,7 +252,6 @@ const ShortStorySlider: React.FC = () => {
                                     >
                                         {item.title.split(" ")[0] === "The" ? "Now" : 2020 + idx}
                                     </span>
-                                    
                                 </div>
                                 <div className="mb-4 w-full">
                                     <p className="text-base md:text-lg text-gray-700 text-left overflow-hidden" style={{ minHeight: '4.5em', maxHeight: '4.5em' }}>
