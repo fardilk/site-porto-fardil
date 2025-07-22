@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 
-// https://vite.dev/config/
 export default defineConfig({
+  base: '/', // default, bisa diabaikan
   plugins: [],
 })
