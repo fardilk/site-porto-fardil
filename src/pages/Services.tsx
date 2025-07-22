@@ -1,14 +1,24 @@
 import React from "react";
-import Navbar from '../components/navbar/Navbar';
+import Navbar from "../components/navbar/Navbar";
+import SliderSection from "../components/services/SliderSection";
+import CardSection from "../components/services/CardSection";
+import AlternatingSection from "../components/services/AlternatingSection";
+import PricingSection from "../components/services/PricingSection";
+import FAQSection from "../components/services/FAQSection";
+import CTASection from "../components/services/CTASection";
 
-const Experience: React.FC = () => (
+const Services: React.FC = () => (
   <>
     <Navbar />
     <main className="mt-12">
-      <h1 className="text-3xl font-bold">Services Page</h1>
-      <p className="mt-2 text-gray-700">This is the portfolio page. Content coming soon!</p>
+      <SliderSection />
+      <CardSection />
+      <AlternatingSection />
+      <PricingSection />
+      <FAQSection />
+      <CTASection />
     </main>
   </>
 );
 
-export default Experience;
+export default Services;
