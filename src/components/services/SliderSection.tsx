@@ -4,7 +4,6 @@ import { Navigation, Pagination } from "swiper/modules";
 import { motion } from "framer-motion";
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 
 const slides = [
   {
@@ -25,10 +24,10 @@ const slides = [
 ];
 
 const SliderSection: React.FC = () => (
-  <section className="w-full py-16 bg-neutral text-white">
+  <section className="w-full py-16 bg-white text-gray-900">
     <div className="container-80">
       <motion.h2
-        className="text-2xl md:text-3xl font-bold mb-8"
+        className="text-2xl md:text-3xl font-bold mb-8 text-gray-900"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -49,11 +48,11 @@ const SliderSection: React.FC = () => (
               <img
                 src={item.img}
                 alt={item.title}
-                className="w-full md:w-1/2 rounded-lg shadow-lg object-cover"
+                className="w-full md:w-1/2 rounded-lg shadow-lg object-cover aspect-video"
               />
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                <p className="text-gray-200">{item.desc}</p>
+              <div className="flex-1 flex flex-col justify-center items-start md:items-start">
+                <h3 className="text-xl font-semibold mb-2 text-gray-900">{item.title}</h3>
+                <p className="text-gray-700 text-base md:text-lg leading-relaxed">{item.desc}</p>
               </div>
             </div>
           </SwiperSlide>

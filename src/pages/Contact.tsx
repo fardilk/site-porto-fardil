@@ -3,9 +3,15 @@ import Navbar from "../components/navbar/Navbar";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 
+type ContactFormData = {
+  name: string;
+  email: string;
+  message: string;
+};
+
 const Contact: React.FC = () => {
-  const { register, handleSubmit, reset } = useForm();
-  const onSubmit = (data: any) => {
+  const { register, handleSubmit, reset } = useForm<ContactFormData>();
+  const onSubmit = (data: ContactFormData) => {
     console.log(data);
     reset();
   };
