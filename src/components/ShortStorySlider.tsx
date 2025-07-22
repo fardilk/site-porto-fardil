@@ -71,29 +71,25 @@ const ScribbleProgress: React.FC<{ progress: number; total: number; }> = ({ prog
     const pathD = "M40 24 Q80 0 120 24 Q160 48 200 24 Q240 0 280 24 Q320 40 320 24";
 
     // Helper: get point on path at t (0..1) using SVG path approximation
-    function getPointOnPath(d: string, t: number) {
-        // Hardcoded for this path: 7 segments (start, 6 curves)
-        // Each segment: [start, control, end]
+    function getPointOnPath(t: number) {
         const segments = [
             { start: [40, 24], control: [80, 0], end: [120, 24] },
             { start: [120, 24], control: [160, 48], end: [200, 24] },
             { start: [200, 24], control: [240, 0], end: [280, 24] },
             { start: [280, 24], control: [320, 40], end: [320, 24] },
         ];
-        // Map t (0..1) to segment
         const segCount = segments.length;
         const segT = t * segCount;
         const segIdx = Math.min(Math.floor(segT), segCount - 1);
         const localT = segT - segIdx;
         const seg = segments[segIdx];
-        // Quadratic Bezier formula
         const x = (1 - localT) * (1 - localT) * seg.start[0] + 2 * (1 - localT) * localT * seg.control[0] + localT * localT * seg.end[0];
         const y = (1 - localT) * (1 - localT) * seg.start[1] + 2 * (1 - localT) * localT * seg.control[1] + localT * localT * seg.end[1];
         return { x, y };
     }
 
     // Get plane position on the path and raise it higher
-    const planePosRaw = getPointOnPath(pathD, percent);
+    const planePosRaw = getPointOnPath(percent);
     const planePos = { x: planePosRaw.x, y: planePosRaw.y - 16 };
 
     return (
@@ -196,30 +192,30 @@ const ShortStorySlider: React.FC = () => {
                     let visibility = "hidden";
 
                     if (idx === activeIndex) {
-  scale = "scale-100";
-  opacity = "opacity-100";
-  z = "z-20"; // Tengah benar-benar di depan
-  translate = "translate-x-0";
-  visibility = "";
-} else if (idx === nextIdx) {
-  scale = "scale-90";
-  opacity = "opacity-60";
-  z = "z-0"; // Kanan tetap di belakang
-  translate = "translate-x-24"; // dorong ke kanan
-  visibility = "";
-} else if (idx === prevIdx) {
-  scale = "scale-90";
-  opacity = "opacity-60";
-  z = "z-10"; // kiri masih sedikit di atas kanan
-  translate = "-translate-x-24"; // dorong ke kiri
-  visibility = "";
-} else {
-  scale = "scale-75";
-  opacity = "opacity-0";
-  z = "z-0";
-  translate = "translate-x-0";
-  visibility = "hidden";
-}
+                        scale = "scale-100";
+                        opacity = "opacity-100";
+                        z = "z-20"; // Tengah benar-benar di depan
+                        translate = "translate-x-0";
+                        visibility = "";
+                    } else if (idx === nextIdx) {
+                        scale = "scale-90";
+                        opacity = "opacity-60";
+                        z = "z-0"; // Kanan tetap di belakang
+                        translate = "translate-x-24"; // dorong ke kanan
+                        visibility = "";
+                    } else if (idx === prevIdx) {
+                        scale = "scale-90";
+                        opacity = "opacity-60";
+                        z = "z-10"; // kiri masih sedikit di atas kanan
+                        translate = "-translate-x-24"; // dorong ke kiri
+                        visibility = "";
+                    } else {
+                        scale = "scale-75";
+                        opacity = "opacity-0";
+                        z = "z-0";
+                        translate = "translate-x-0";
+                        visibility = "hidden";
+                    }
 
 
                     return (
@@ -247,10 +243,9 @@ const ShortStorySlider: React.FC = () => {
                                         {item.title}
                                     </h3>
                                     <span
-                                        className={`px-3 py-1 rounded-full text-xs font-semibold bg-[#fca311] text-white shadow transition ${idx === activeIndex ? "scale-105 ring-2 ring-[#22553c]" : "opacity-70"
-                                            }`}
+                                      className={`px-3 py-1 rounded-full text-xs font-semibold bg-[#fca311] text-white shadow transition mr-2 border-r-2 border-white ${idx === activeIndex ? "scale-105 ring-2 ring-[#22553c]" : "opacity-70"}`}
                                     >
-                                        {item.title.split(" ")[0] === "The" ? "Now" : 2020 + idx}
+                                      {item.title.split(" ")[0] === "The" ? "Now" : 2020 + idx}
                                     </span>
                                 </div>
                                 <div className="mb-4 w-full">
