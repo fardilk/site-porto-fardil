@@ -1,42 +1,36 @@
-import React from "react";
-import Navbar from "../components/navbar/Navbar";
+import React, { useState } from "react"
+import Navbar from "../components/navbar/Navbar"
+import ArticleCard from "../components/articles/ArticleCard"
+import { articles } from "./articlesData"
 
-const posts = [
-  {
-    title: "Designing For Conversion",
-    date: "May 2024",
-    excerpt: "Practical tips to ensure your website turns visitors into customers.",
-  },
-  {
-    title: "Understanding Core Web Vitals",
-    date: "April 2024",
-    excerpt: "A breakdown of Google's performance metrics and how to hit them.",
-  },
-  {
-    title: "Content Strategy Basics",
-    date: "March 2024",
-    excerpt: "Why quality content matters more than ever in today's digital landscape.",
-  },
-];
+const categories = ["All", "Product", "Tech", "Career", "Life"]
 
-const Articles: React.FC = () => (
-  <>
-    <Navbar />
-    <main className="mt-12 py-16">
-      <div className="container-80">
-        <h1 className="text-2xl md:text-3xl font-bold text-primary mb-8 text-center">Latest Articles</h1>
-        <div className="space-y-8">
-          {posts.map((post) => (
-            <article key={post.title} className="border-b pb-4">
-              <h2 className="text-xl font-semibold text-primary mb-1">{post.title}</h2>
-              <p className="text-sm text-gray-500 mb-2">{post.date}</p>
-              <p className="text-gray-700">{post.excerpt}</p>
-            </article>
+export default function Articles() {
+  const [active, setActive] = useState("All")
+  const filtered = active === "All" ? articles : articles.filter((a) => a.category === active)
+
+  return (
+    <>
+      <Navbar />
+      <main className="mt-12 px-6 md:px-16 py-16 space-y-8">
+        <h1 className="text-3xl font-bold text-primary text-center">Latest Articles</h1>
+        <div className="flex justify-center gap-2 flex-wrap">
+          {categories.map((c) => (
+            <button
+              key={c}
+              onClick={() => setActive(c)}
+              className={`px-3 py-1 rounded-full text-sm ${active === c ? "bg-accent text-primary" : "bg-gray-200"}`}
+            >
+              {c}
+            </button>
           ))}
         </div>
-      </div>
-    </main>
-  </>
-);
-
-export default Articles;
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((article) => (
+            <ArticleCard key={article.slug} {...article} />
+          ))}
+        </div>
+      </main>
+    </>
+  )
+}
