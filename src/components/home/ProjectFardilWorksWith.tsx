@@ -1,4 +1,3 @@
-import React from "react"
 import { FaToolbox } from "react-icons/fa"
 
 const projects = Array.from({ length: 8 }).map((_, i) => ({

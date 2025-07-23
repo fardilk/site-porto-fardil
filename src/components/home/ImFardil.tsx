@@ -1,5 +1,3 @@
-import React from "react"
-
 export default function ImFardil() {
   return (
     <section className="px-6 md:px-16 py-16">

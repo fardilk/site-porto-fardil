@@ -1,4 +1,3 @@
-import React from "react"
 import { FaBriefcase, FaTasks, FaHandsHelping } from "react-icons/fa"
 
 const options = [

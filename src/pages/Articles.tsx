@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+
+import { useState } from "react"
 import Navbar from "../components/navbar/Navbar"
 import ArticleCard from "../components/articles/ArticleCard"
 import { articles } from "./articlesData"
