@@ -194,20 +194,20 @@ const ShortStorySlider: React.FC = () => {
                     if (idx === activeIndex) {
                         scale = "scale-100";
                         opacity = "opacity-100";
-                        z = "z-20"; // Tengah benar-benar di depan
+                        z = "z-20"; // Center slide always on top
                         translate = "translate-x-0";
                         visibility = "";
                     } else if (idx === nextIdx) {
                         scale = "scale-90";
-                        opacity = "opacity-60";
-                        z = "z-0"; // Kanan tetap di belakang
-                        translate = "translate-x-24"; // dorong ke kanan
+                        opacity = "opacity-10";
+                        z = "z-0"; // Right slide BEHIND center and left
+                        translate = "translate-x-24";
                         visibility = "";
                     } else if (idx === prevIdx) {
                         scale = "scale-90";
-                        opacity = "opacity-60";
-                        z = "z-10"; // kiri masih sedikit di atas kanan
-                        translate = "-translate-x-24"; // dorong ke kiri
+                        opacity = "opacity-10";
+                        z = "z-10"; // Left slide ABOVE right, but still behind center
+                        translate = "-translate-x-24";
                         visibility = "";
                     } else {
                         scale = "scale-75";
@@ -217,11 +217,10 @@ const ShortStorySlider: React.FC = () => {
                         visibility = "hidden";
                     }
 
-
                     return (
                         <SwiperSlide key={idx} className="flex justify-center">
                             <div
-                                className={`transition-all duration-500 flex flex-col items-start justify-start px-4 py-8 min-h-[220px] md:min-h-[260px] rounded-xl bg-white shadow-[0_6px_24px_0_rgba(34,85,60,0.18)] w-full ${scale} ${opacity} ${z} ${translate} ${visibility}`}
+                                className={`transition-all duration-500 flex flex-col items-start justify-start px-4 py-8 min-h-[220px] md:min-h-[260px] rounded-xl bg-white shadow-[0_6px_24px_0_rgba(34,85,60,0.18)] w-full max-w-xs ${scale} ${opacity} ${z} ${translate} ${visibility}`}
                                 style={
                                     visibility === "hidden"
                                         ? { display: "none", maxWidth: "320px" }
@@ -243,9 +242,9 @@ const ShortStorySlider: React.FC = () => {
                                         {item.title}
                                     </h3>
                                     <span
-                                      className={`px-3 py-1 rounded-full text-xs font-semibold bg-[#fca311] text-white shadow transition mr-2 border-r-2 border-white ${idx === activeIndex ? "scale-105 ring-2 ring-[#22553c]" : "opacity-70"}`}
+                                        className={`px-3 py-1 rounded-full text-xs font-semibold bg-[#fca311] text-white shadow transition mr-2 border-r-2 border-white ${idx === activeIndex ? "scale-105 ring-2 ring-[#22553c]" : "opacity-70"}`}
                                     >
-                                      {item.title.split(" ")[0] === "The" ? "Now" : 2020 + idx}
+                                        {item.title.split(" ")[0] === "The" ? "Now" : 2020 + idx}
                                     </span>
                                 </div>
                                 <div className="mb-4 w-full">
