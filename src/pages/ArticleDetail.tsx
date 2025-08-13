@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import type React from "react";
 import Navbar from "../components/navbar/Navbar";
-import { articles } from "./articlesData";
+import { articles, type Block } from "./articlesData";
 import LikeButton from "../components/articles/LikeButton";
 import CommentSection from "../components/articles/CommentSection";
 import RelatedArticles from "../components/articles/RelatedArticles";
@@ -123,6 +123,111 @@ function renderStructured(content: string) {
   return nodes;
 }
 
+function renderBlocks(blocks: Block[]) {
+  let key = 0;
+  return blocks.map((b) => {
+    switch (b.type) {
+      case "paragraph":
+        return (
+          <p key={`b-p-${key++}`} className="text-slate-800 leading-7">
+            {parseInlineAnchors(b.text)}
+          </p>
+        );
+      case "heading": {
+        const level = b.level ?? 2;
+        const common = "font-semibold text-slate-900 mt-6";
+        const text = parseInlineAnchors(b.text);
+        if (level === 1)
+          return (
+            <h1 key={`b-h1-${key++}`} className={`text-3xl ${common}`}>
+              {text}
+            </h1>
+          );
+        if (level === 2)
+          return (
+            <h2 key={`b-h2-${key++}`} className={`text-2xl ${common}`}>
+              {text}
+            </h2>
+          );
+        return (
+          <h3 key={`b-h3-${key++}`} className={`text-xl ${common}`}>
+            {text}
+          </h3>
+        );
+      }
+      case "list": {
+        const ordered = b.style === "numbered";
+        const ListTag: React.ElementType = ordered ? "ol" : "ul";
+        const cls = ordered
+          ? "list-decimal pl-6 text-slate-800"
+          : "list-disc pl-6 text-slate-800";
+        return (
+          <ListTag key={`b-list-${key++}`} className={cls}>
+            {b.items.map((it, i) => (
+              <li key={i}>{parseInlineAnchors(it)}</li>
+            ))}
+          </ListTag>
+        );
+      }
+      case "image":
+        return (
+          <figure key={`b-img-${key++}`} className="my-4">
+            <img src={b.src} alt={b.alt || ""} className="w-full rounded-xl" loading="lazy" />
+            {b.caption && (
+              <figcaption className="text-center text-sm text-slate-500 mt-1">{b.caption}</figcaption>
+            )}
+          </figure>
+        );
+      case "code":
+        return (
+          <pre key={`b-code-${key++}`} className="bg-slate-900 text-slate-100 rounded-lg p-4 overflow-auto">
+            <code>{b.code}</code>
+          </pre>
+        );
+      case "hr":
+        return <hr key={`b-hr-${key++}`} className="my-6 border-slate-200" />;
+      case "table":
+        return (
+          <div key={`b-table-${key++}`} className="overflow-x-auto my-4">
+            <table className="min-w-full text-left border-collapse">
+              {b.headers && (
+                <thead>
+                  <tr>
+                    {b.headers.map((h, i) => (
+                      <th key={i} className="border-b px-3 py-2 font-semibold text-slate-700">
+                        {parseInlineAnchors(h)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+              )}
+              <tbody>
+                {b.rows.map((row, ri) => (
+                  <tr key={ri} className="odd:bg-slate-50">
+                    {row.map((cell, ci) => (
+                      <td key={ci} className="border-b px-3 py-2">
+                        {parseInlineAnchors(cell)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      case "quote":
+        return (
+          <blockquote key={`b-quote-${key++}`} className="border-l-4 pl-4 italic text-slate-700 my-4">
+            {parseInlineAnchors(b.text)}
+            {b.cite && <div className="text-sm text-slate-500 mt-1">— {b.cite}</div>}
+          </blockquote>
+        );
+      default:
+        return null;
+    }
+  });
+}
+
 export default function ArticleDetail() {
   const { slug } = useParams()
   const article = articles.find((a) => a.slug === slug)
@@ -167,7 +272,11 @@ export default function ArticleDetail() {
               </div>
               <img src={article.coverImage || getFallbackImage(article)} alt={article.title} className="w-full rounded-xl" loading="lazy" />
               <div className="prose max-w-none">
-                {renderStructured(article.content)}
+                {article.blocks
+                  ? renderBlocks(article.blocks)
+                  : article.content
+                  ? renderStructured(article.content)
+                  : null}
               </div>
               <div className="pt-2">
                 <LikeButton />

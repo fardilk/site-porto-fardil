@@ -18,13 +18,27 @@ export const CATEGORIES: Category[] = [
   "Hobbies",
 ];
 
+// Rich content blocks for articles (each paragraph or element is a JSON block)
+export type Block =
+  | { type: "paragraph"; text: string }
+  | { type: "heading"; level?: 1 | 2 | 3 | 4 | 5 | 6; text: string }
+  | { type: "list"; style?: "bulleted" | "numbered"; items: string[] }
+  | { type: "image"; src: string; alt?: string; caption?: string }
+  | { type: "code"; language?: string; code: string }
+  | { type: "hr" }
+  | { type: "table"; headers?: string[]; rows: string[][] }
+  | { type: "quote"; text: string; cite?: string };
+
 export type Article = {
   slug: string; // SEO slug, <= 60 chars
   title: string;
   date: string; // e.g., 2025-07-01 or display string
   category: Category;
   excerpt: string;
-  content: string;
+  // Legacy plain-text content (parsed into paragraphs). Use `blocks` for richer content.
+  content?: string;
+  // New: Structured content blocks. Each paragraph/element is one JSON block.
+  blocks?: Block[];
   coverImage?: string;
   readTime?: number;
   tags?: string[];
