@@ -22,12 +22,13 @@ function upsertMeta(attr: "name" | "property", key: string, content: string) {
 export default function PageMeta({ title, description, image, url, type = "article" }: Props) {
   useEffect(() => {
     const origin = typeof window !== "undefined" ? window.location.origin : "";
-    const resolvedImage = image
-      ? image.startsWith("http")
-        ? image
+    const img = image || "/fardil-on-semeru.png"; // default share image from public/
+    const resolvedImage = img
+      ? img.startsWith("http")
+        ? img
         : origin
-          ? new URL(image, origin).toString()
-          : image
+          ? new URL(img, origin).toString()
+          : img
       : undefined;
     const resolvedUrl = url ?? (typeof window !== "undefined" ? window.location.href : undefined);
 

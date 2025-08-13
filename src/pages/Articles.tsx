@@ -25,7 +25,7 @@ export default function Articles() {
       <PageMeta
         title="Articles | Fardil"
         description="Browse featured and popular reads across Product, Technology, Startup, and more."
-        image="/Fardil On Semeru.png"
+        image="/fardil-on-semeru.png"
         type="website"
       />
       <Navbar />

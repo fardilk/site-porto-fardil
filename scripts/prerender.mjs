@@ -7,13 +7,28 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
 const srcArticles = join(root, 'src/pages/articlesData.ts');
 const outDir = join(root, 'dist');
+const ORIGIN = process.env.SITE_ORIGIN || 'https://fardil.com';
 
-function injectMeta(html, { title, description, image, type = 'article' }) {
+function toAbsolute(url) {
+  if (!url) return undefined;
+  if (/^https?:\/\//i.test(url)) return url;
+  const path = url.startsWith('/') ? url : `/${url}`;
+  // encode spaces and special chars in path
+  const encoded = path
+    .split('/')
+    .map((seg) => (seg ? encodeURIComponent(seg) : ''))
+    .join('/');
+  return new URL(encoded, ORIGIN).toString();
+}
+
+function injectMeta(html, { title, description, image, type = 'article', url }) {
   const headOpen = html.indexOf('<head>');
   if (headOpen === -1) return html;
   const before = html.slice(0, headOpen + '<head>'.length);
   const after = html.slice(headOpen + '<head>'.length);
-  const tags = `\n    <title>${title}</title>\n    <meta name="description" content="${description}" />\n    <meta property="og:title" content="${title}" />\n    <meta property="og:description" content="${description}" />\n    <meta property="og:image" content="${image}" />\n    <meta property="og:type" content="${type}" />\n    <meta name="twitter:card" content="summary_large_image" />\n    <meta name="twitter:title" content="${title}" />\n    <meta name="twitter:description" content="${description}" />\n    <meta name="twitter:image" content="${image}" />\n  `;
+  const absImage = toAbsolute(image);
+  const absUrl = toAbsolute(url);
+  const tags = `\n    <title>${title}</title>\n    <meta name="description" content="${description}" />\n    <meta property="og:title" content="${title}" />\n    <meta property="og:description" content="${description}" />\n    <meta property="og:image" content="${absImage ?? ''}" />\n    <meta property="og:type" content="${type}" />\n    ${absUrl ? `<meta property="og:url" content="${absUrl}" />` : ''}\n    <meta name="twitter:card" content="summary_large_image" />\n    <meta name="twitter:title" content="${title}" />\n    <meta name="twitter:description" content="${description}" />\n    <meta name="twitter:image" content="${absImage ?? ''}" />\n  `;
   return before + '\n' + tags + after;
 }
 
@@ -40,6 +55,7 @@ async function main() {
     description: 'Browse featured and popular reads across Product, Technology, Startup, and more.',
     image: '/Fardil On Semeru.png',
     type: 'website',
+    url: '/articles',
   };
   const listHtml = injectMeta(template, listMeta);
   const listPath = join(outDir, 'articles', 'index.html');
@@ -53,6 +69,7 @@ async function main() {
       description: a.excerpt || 'Read more on Fardil\'s blog.',
       image: a.coverImage || '/Fardil On Semeru.png',
       type: 'article',
+      url: `/articles/${a.slug}`,
     };
     const html = injectMeta(template, meta);
     const filePath = join(outDir, 'articles', a.slug, 'index.html');
@@ -70,6 +87,7 @@ async function main() {
           'I help teams ship fast with clarity and craft. Explore projects, experience, and articles on Product and Technology.',
         image: '/Fardil On Semeru.png',
         type: 'website',
+        url: '/',
       },
     },
     {
@@ -79,6 +97,7 @@ async function main() {
         description: 'Product management, discovery, and delivery—outcomes-focused engagements to accelerate your roadmap.',
         image: '/Fardil On Semeru.png',
         type: 'website',
+        url: '/services',
       },
     },
     {
@@ -88,6 +107,7 @@ async function main() {
         description: 'Selected projects and case studies demonstrating product outcomes and engineering craft.',
         image: '/Fardil On Semeru.png',
         type: 'website',
+        url: '/portfolio',
       },
     },
     {
@@ -97,6 +117,7 @@ async function main() {
         description: 'A product-minded engineer focused on clarity, craft, and outcomes. Learn more about my journey and values.',
         image: '/Fardil On Semeru.png',
         type: 'website',
+        url: '/about',
       },
     },
     {
@@ -106,6 +127,7 @@ async function main() {
         description: 'Roles, responsibilities, and impact across product and engineering initiatives.',
         image: '/Fardil On Semeru.png',
         type: 'website',
+        url: '/experience',
       },
     },
     {
@@ -115,6 +137,7 @@ async function main() {
         description: 'Get in touch to discuss your goals and how we can ship meaningful outcomes together.',
         image: '/Fardil On Semeru.png',
         type: 'website',
+        url: '/contact',
       },
     },
     {
@@ -124,6 +147,7 @@ async function main() {
         description: 'Need a product leader who connects vision to delivery? Let’s talk about your roadmap and outcomes.',
         image: '/Fardil On Semeru.png',
         type: 'website',
+        url: '/hire-me',
       },
     },
   ];
