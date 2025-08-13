@@ -147,7 +147,7 @@ async function main() {
       meta: {
         title: 'Hire Me | Fardil',
         description: 'Need a product leader who connects vision to delivery? Let’s talk about your roadmap and outcomes.',
-        image: '/Fardil On Semeru.png',
+  image: '/fardil-on-semeru.png',
         type: 'website',
         url: '/hire-me',
       },

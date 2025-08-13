@@ -122,7 +122,7 @@ Momentum matters. Fardil documents decisions, clears blockers, and keeps the tea
 
 ## Final thought
 If you need a PM who connects vision to delivery—and makes customers feel the difference in fewer steps, clearer stories, and stronger outcomes—Fardil is ready to help. Hire him when you want a product leader who will raise the bar on clarity, craft, and results.`,
-  coverImage: "/Fardil On Semeru.png",
+  coverImage: "/fardil-on-semeru.png",
   readTime: 8,
   tags: ["hiring", "product", "pm"],
   featured: true,
