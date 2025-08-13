@@ -8,6 +8,8 @@ const root = join(__dirname, '..');
 const srcArticles = join(root, 'src/pages/articlesData.ts');
 const outDir = join(root, 'dist');
 const ORIGIN = process.env.SITE_ORIGIN || 'https://fardil.com';
+const IMG_WIDTH = Number(process.env.OG_IMAGE_WIDTH || 1200);
+const IMG_HEIGHT = Number(process.env.OG_IMAGE_HEIGHT || 627);
 
 function toAbsolute(url) {
   if (!url) return undefined;
@@ -28,7 +30,7 @@ function injectMeta(html, { title, description, image, type = 'article', url }) 
   const after = html.slice(headOpen + '<head>'.length);
   const absImage = toAbsolute(image);
   const absUrl = toAbsolute(url);
-  const tags = `\n    <title>${title}</title>\n    <meta name="description" content="${description}" />\n    <meta property="og:title" content="${title}" />\n    <meta property="og:description" content="${description}" />\n    <meta property="og:image" content="${absImage ?? ''}" />\n    <meta property="og:type" content="${type}" />\n    ${absUrl ? `<meta property="og:url" content="${absUrl}" />` : ''}\n    <meta name="twitter:card" content="summary_large_image" />\n    <meta name="twitter:title" content="${title}" />\n    <meta name="twitter:description" content="${description}" />\n    <meta name="twitter:image" content="${absImage ?? ''}" />\n  `;
+  const tags = `\n    <title>${title}</title>\n    <meta name="description" content="${description}" />\n    <meta property="og:title" content="${title}" />\n    <meta property="og:description" content="${description}" />\n    <meta property="og:image" content="${absImage ?? ''}" />\n    ${absImage ? `<meta property=\"og:image:width\" content=\"${IMG_WIDTH}\" />` : ''}\n    ${absImage ? `<meta property=\"og:image:height\" content=\"${IMG_HEIGHT}\" />` : ''}\n    <meta property="og:type" content="${type}" />\n    ${absUrl ? `<meta property="og:url" content="${absUrl}" />` : ''}\n    <meta name="twitter:card" content="summary_large_image" />\n    <meta name="twitter:title" content="${title}" />\n    <meta name="twitter:description" content="${description}" />\n    <meta name="twitter:image" content="${absImage ?? ''}" />\n  `;
   return before + '\n' + tags + after;
 }
 
