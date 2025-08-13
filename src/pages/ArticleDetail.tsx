@@ -8,24 +8,76 @@ import RelatedArticles from "../components/articles/RelatedArticles";
 import PageMeta from "../components/seo/PageMeta";
 import { getFallbackImage } from "../components/articles/imageFallback";
 
+function parseInlineAnchors(text: string): React.ReactNode[] {
+  const parts: React.ReactNode[] = [];
+  const anchorRe = /(<a\b[^>]*>.*?<\/a>)/gi;
+  let lastIndex = 0;
+  const matches = [...text.matchAll(anchorRe)];
+  if (matches.length === 0) return [text];
+  for (const m of matches) {
+    const idx = m.index ?? 0;
+    if (idx > lastIndex) {
+      parts.push(text.slice(lastIndex, idx));
+    }
+    const raw = m[0];
+    // Extract href, class and inner text (support both single and double quotes)
+    const hrefMatch = /href\s*=\s*("([^"]+)"|'([^']+)')/i.exec(raw);
+    const classMatch = /class\s*=\s*("([^"]+)"|'([^']+)')/i.exec(raw);
+    const href = hrefMatch?.[2] || hrefMatch?.[3] || "#";
+    const cls = classMatch?.[2] || classMatch?.[3] || "text-accent underline";
+    const inner = />([\s\S]*?)<\/a>/i.exec(raw)?.[1] ?? href;
+    const external = /^https?:\/\//i.test(href);
+    const isInternal = !external && href.startsWith("/");
+    const key = `${href}-${idx}`;
+    if (isInternal) {
+      parts.push(
+        <Link key={key} to={href} className={cls}>
+          {inner}
+        </Link>
+      );
+    } else {
+      parts.push(
+        <a
+          key={key}
+          href={href}
+          className={cls}
+          rel={external ? "noopener noreferrer" : undefined}
+          target={external ? "_blank" : undefined}
+        >
+          {inner}
+        </a>
+      );
+    }
+    lastIndex = idx + raw.length;
+  }
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex));
+  return parts;
+}
+
 function renderStructured(content: string) {
   const nodes: React.ReactNode[] = [];
   const lines = content.split(/\r?\n/);
   let para: string[] = [];
   let list: string[] = [];
+  let keyCounter = 0;
 
   const flushPara = () => {
     if (para.length) {
-      nodes.push(<p className="text-slate-800 leading-7">{para.join(" ")}</p>);
+      const text = para.join(" ");
+      nodes.push(
+        <p key={`p-${keyCounter++}`} className="text-slate-800 leading-7">
+          {parseInlineAnchors(text)}
+        </p>
+      );
       para = [];
     }
   };
   const flushList = () => {
     if (list.length) {
       nodes.push(
-        <ul className="list-disc pl-6 text-slate-800">
+        <ul key={`ul-${keyCounter++}`} className="list-disc pl-6 text-slate-800">
           {list.map((it, idx) => (
-            <li key={idx}>{it}</li>
+            <li key={idx}>{parseInlineAnchors(it)}</li>
           ))}
         </ul>
       );
@@ -43,13 +95,21 @@ function renderStructured(content: string) {
     if (line.startsWith("## ")) {
       flushPara();
       flushList();
-      nodes.push(<h2 className="text-2xl font-semibold text-slate-900 mt-6">{line.slice(3)}</h2>);
+      nodes.push(
+        <h2 key={`h2-${keyCounter++}`} className="text-2xl font-semibold text-slate-900 mt-6">
+          {parseInlineAnchors(line.slice(3))}
+        </h2>
+      );
       continue;
     }
     if (line.startsWith("### ")) {
       flushPara();
       flushList();
-      nodes.push(<h3 className="text-xl font-semibold text-slate-900 mt-4">{line.slice(4)}</h3>);
+      nodes.push(
+        <h3 key={`h3-${keyCounter++}`} className="text-xl font-semibold text-slate-900 mt-4">
+          {parseInlineAnchors(line.slice(4))}
+        </h3>
+      );
       continue;
     }
     if (line.startsWith("- ")) {
