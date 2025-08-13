@@ -1,5 +1,5 @@
 import { build } from 'esbuild';
-import { mkdir, readFile, writeFile } from 'fs/promises';
+import { mkdir, readFile, writeFile, rm } from 'fs/promises';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -42,6 +42,8 @@ async function getArticles() {
     outfile,
   });
   const { articles } = await import('file://' + outfile);
+  // best-effort cleanup of tmp bundle to avoid git conflicts on deploy hosts
+  try { await rm(outfile, { force: true }); } catch {}
   return articles;
 }
 
@@ -53,7 +55,7 @@ async function main() {
   const listMeta = {
     title: 'Articles | Fardil',
     description: 'Browse featured and popular reads across Product, Technology, Startup, and more.',
-    image: '/Fardil On Semeru.png',
+  image: '/fardil-on-semeru.png',
     type: 'website',
     url: '/articles',
   };
@@ -67,7 +69,7 @@ async function main() {
     const meta = {
       title: `${a.title} | Fardil`,
       description: a.excerpt || 'Read more on Fardil\'s blog.',
-      image: a.coverImage || '/Fardil On Semeru.png',
+  image: a.coverImage || '/fardil-on-semeru.png',
       type: 'article',
       url: `/articles/${a.slug}`,
     };
@@ -85,7 +87,7 @@ async function main() {
         title: 'Fardil | Product-minded Engineer & PM',
         description:
           'I help teams ship fast with clarity and craft. Explore projects, experience, and articles on Product and Technology.',
-        image: '/Fardil On Semeru.png',
+  image: '/fardil-on-semeru.png',
         type: 'website',
         url: '/',
       },
@@ -95,7 +97,7 @@ async function main() {
       meta: {
         title: 'Services | Fardil',
         description: 'Product management, discovery, and delivery—outcomes-focused engagements to accelerate your roadmap.',
-        image: '/Fardil On Semeru.png',
+  image: '/fardil-on-semeru.png',
         type: 'website',
         url: '/services',
       },
@@ -105,7 +107,7 @@ async function main() {
       meta: {
         title: 'Portfolio | Fardil',
         description: 'Selected projects and case studies demonstrating product outcomes and engineering craft.',
-        image: '/Fardil On Semeru.png',
+  image: '/fardil-on-semeru.png',
         type: 'website',
         url: '/portfolio',
       },
@@ -115,7 +117,7 @@ async function main() {
       meta: {
         title: 'About | Fardil',
         description: 'A product-minded engineer focused on clarity, craft, and outcomes. Learn more about my journey and values.',
-        image: '/Fardil On Semeru.png',
+  image: '/fardil-on-semeru.png',
         type: 'website',
         url: '/about',
       },
@@ -125,7 +127,7 @@ async function main() {
       meta: {
         title: 'Experience | Fardil',
         description: 'Roles, responsibilities, and impact across product and engineering initiatives.',
-        image: '/Fardil On Semeru.png',
+  image: '/fardil-on-semeru.png',
         type: 'website',
         url: '/experience',
       },
@@ -135,7 +137,7 @@ async function main() {
       meta: {
         title: 'Contact | Fardil',
         description: 'Get in touch to discuss your goals and how we can ship meaningful outcomes together.',
-        image: '/Fardil On Semeru.png',
+  image: '/fardil-on-semeru.png',
         type: 'website',
         url: '/contact',
       },
