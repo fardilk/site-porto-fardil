@@ -27,7 +27,14 @@ export type Block =
   | { type: "code"; language?: string; code: string }
   | { type: "hr" }
   | { type: "table"; headers?: string[]; rows: string[][] }
-  | { type: "quote"; text: string; cite?: string };
+  | { type: "quote"; text: string; cite?: string }
+  | {
+      type: "cta";
+      title: string;
+      body: string; // supports inline <a>
+      button: { label: string; href: string; download?: boolean };
+      image?: { src: string; alt?: string };
+    };
 
 export type Article = {
   slug: string; // SEO slug, <= 60 chars

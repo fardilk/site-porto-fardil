@@ -65,7 +65,7 @@ function renderStructured(content: string) {
     if (para.length) {
       const text = para.join(" ");
       nodes.push(
-        <p key={`p-${keyCounter++}`} className="text-slate-800 leading-7">
+        <p key={`p-${keyCounter++}`} className="text-slate-800 leading-7 mb-[0.8em]">
           {parseInlineAnchors(text)}
         </p>
       );
@@ -75,7 +75,7 @@ function renderStructured(content: string) {
   const flushList = () => {
     if (list.length) {
       nodes.push(
-        <ul key={`ul-${keyCounter++}`} className="list-disc pl-6 text-slate-800">
+  <ul key={`ul-${keyCounter++}`} className="list-disc pl-6 text-slate-800">
           {list.map((it, idx) => (
             <li key={idx}>{parseInlineAnchors(it)}</li>
           ))}
@@ -96,7 +96,7 @@ function renderStructured(content: string) {
       flushPara();
       flushList();
       nodes.push(
-        <h2 key={`h2-${keyCounter++}`} className="text-2xl font-semibold text-slate-900 mt-6">
+        <h2 key={`h2-${keyCounter++}`} className="text-2xl font-semibold text-slate-900 mt-6 mb-[0.5em]">
           {parseInlineAnchors(line.slice(3))}
         </h2>
       );
@@ -106,7 +106,7 @@ function renderStructured(content: string) {
       flushPara();
       flushList();
       nodes.push(
-        <h3 key={`h3-${keyCounter++}`} className="text-xl font-semibold text-slate-900 mt-4">
+        <h3 key={`h3-${keyCounter++}`} className="text-xl font-semibold text-slate-900 mt-4 mb-[0.5em]">
           {parseInlineAnchors(line.slice(4))}
         </h3>
       );
@@ -129,7 +129,7 @@ function renderBlocks(blocks: Block[]) {
     switch (b.type) {
       case "paragraph":
         return (
-          <p key={`b-p-${key++}`} className="text-slate-800 leading-7">
+          <p key={`b-p-${key++}`} className="text-slate-800 leading-7 mb-[0.8em]">
             {parseInlineAnchors(b.text)}
           </p>
         );
@@ -139,18 +139,18 @@ function renderBlocks(blocks: Block[]) {
         const text = parseInlineAnchors(b.text);
         if (level === 1)
           return (
-            <h1 key={`b-h1-${key++}`} className={`text-3xl ${common}`}>
+            <h1 key={`b-h1-${key++}`} className={`text-3xl ${common} mb-[0.5em]`}>
               {text}
             </h1>
           );
         if (level === 2)
           return (
-            <h2 key={`b-h2-${key++}`} className={`text-2xl ${common}`}>
+            <h2 key={`b-h2-${key++}`} className={`text-2xl ${common} mb-[0.5em]`}>
               {text}
             </h2>
           );
         return (
-          <h3 key={`b-h3-${key++}`} className={`text-xl ${common}`}>
+          <h3 key={`b-h3-${key++}`} className={`text-xl ${common} mb-[0.5em]`}>
             {text}
           </h3>
         );
@@ -221,6 +221,25 @@ function renderBlocks(blocks: Block[]) {
             {parseInlineAnchors(b.text)}
             {b.cite && <div className="text-sm text-slate-500 mt-1">— {b.cite}</div>}
           </blockquote>
+        );
+      case "cta":
+        return (
+          <div key={`b-cta-${key++}`} className="my-6 rounded-xl border border-green-100 bg-green-50/60 p-5 flex gap-4 items-center">
+            {b.image?.src && (
+              <img src={b.image.src} alt={b.image.alt || ""} className="w-24 h-24 object-contain" loading="lazy" />
+            )}
+            <div className="flex-1">
+              <h4 className="text-xl font-semibold text-green-900 mb-[0.5em]">{b.title}</h4>
+              <p className="text-green-900/90 mb-[0.8em]">{parseInlineAnchors(b.body)}</p>
+              <a
+                href={b.button.href}
+                className="inline-block px-4 py-2 rounded-md bg-emerald-600 text-white font-medium shadow hover:bg-emerald-700"
+                download={b.button.download}
+              >
+                {b.button.label}
+              </a>
+            </div>
+          </div>
         );
       default:
         return null;
