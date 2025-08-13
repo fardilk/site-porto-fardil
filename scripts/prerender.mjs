@@ -26,8 +26,15 @@ function toAbsolute(url) {
 function injectMeta(html, { title, description, image, type = 'article', url }) {
   const headOpen = html.indexOf('<head>');
   if (headOpen === -1) return html;
-  const before = html.slice(0, headOpen + '<head>'.length);
-  const after = html.slice(headOpen + '<head>'.length);
+  // Remove existing OG/Twitter/title/description tags to avoid duplicates
+  const cleaned = html
+    .replace(/<meta[^>]+property="og:[^"]+"[^>]*>\s*/gi, '')
+    .replace(/<meta[^>]+name="twitter:[^"]+"[^>]*>\s*/gi, '')
+    .replace(/<meta[^>]+name="description"[^>]*>\s*/gi, '')
+    .replace(/<title>[^<]*<\/title>/gi, '');
+  const newHeadOpen = cleaned.indexOf('<head>');
+  const before = cleaned.slice(0, newHeadOpen + '<head>'.length);
+  const after = cleaned.slice(newHeadOpen + '<head>'.length);
   const absImage = toAbsolute(image);
   const absUrl = toAbsolute(url);
   const tags = `\n    <title>${title}</title>\n    <meta name="description" content="${description}" />\n    <meta property="og:title" content="${title}" />\n    <meta property="og:description" content="${description}" />\n    <meta property="og:image" content="${absImage ?? ''}" />\n    ${absImage ? `<meta property=\"og:image:width\" content=\"${IMG_WIDTH}\" />` : ''}\n    ${absImage ? `<meta property=\"og:image:height\" content=\"${IMG_HEIGHT}\" />` : ''}\n    <meta property="og:type" content="${type}" />\n    ${absUrl ? `<meta property="og:url" content="${absUrl}" />` : ''}\n    <meta name="twitter:card" content="summary_large_image" />\n    <meta name="twitter:title" content="${title}" />\n    <meta name="twitter:description" content="${description}" />\n    <meta name="twitter:image" content="${absImage ?? ''}" />\n  `;
